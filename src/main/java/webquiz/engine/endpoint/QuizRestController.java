@@ -28,8 +28,7 @@ public class QuizRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Quiz saveQuiz(@Valid @RequestBody Quiz quiz) {
-        quizRepository.save(quiz);
-        return quiz;
+        return quizRepository.save(quiz);
     }
 
     @PostMapping("{id}/solve")
@@ -54,11 +53,8 @@ public class QuizRestController {
     @GetMapping("{id}")
     public Quiz getQuiz(@PathVariable int id) {
         Optional<Quiz> quiz = quizRepository.findById(id);
-        if (quiz.isPresent()) {
-            return quiz.get();
-        } else {
-            throw new NoSuchElementException("Quiz with id " + id + " does not exist");
-        }
+        return quiz.orElseThrow(() ->
+                new NoSuchElementException("Quiz with id " + id + " does not exist"));
     }
 
     private Feedback getFeedback(List<Integer> givenAnswer, List<Integer> expectedAnswer) {
