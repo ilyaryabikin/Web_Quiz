@@ -1,19 +1,25 @@
 package webquiz.engine.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import webquiz.engine.json.QuizDeserializer;
+import webquiz.engine.json.QuizSerializer;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+@Entity(name = "quizzes")
+@JsonSerialize(using = QuizSerializer.class)
 @JsonDeserialize(using = QuizDeserializer.class)
-public class Quiz {
+public class Quiz implements Serializable {
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @NotBlank
@@ -23,16 +29,20 @@ public class Quiz {
     private String text;
 
     @Size(min = 2)
-    private List<String> options;
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<Option> options;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<Integer> answerList;
+    @NotNull
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<Answer> answers;
 
-    public Quiz(String title, String text, List<String> options, List<Integer> answerList) {
+    public Quiz() {}
+
+    public Quiz(String title, String text, List<Option> options, List<Answer> answers) {
         this.title = title;
         this.text = text;
         this.options = options;
-        this.answerList = answerList;
+        this.answers = answers;
     }
 
     public int getId() {
@@ -59,26 +69,25 @@ public class Quiz {
         this.text = text;
     }
 
-    public List<String> getOptions() {
+    public List<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(List<String> options) {
+    public void setOptions(List<Option> options) {
         this.options = options;
     }
 
-    public List<Integer> getAnswerList() {
-        return answerList;
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    @JsonSetter("answer")
-    public void setAnswerList(List<Integer> answerList) {
-        this.answerList = answerList;
+    public void setAnswers(List<Answer> answerList) {
+        this.answers = answerList;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, text, options, answerList);
+        return Objects.hash(id, title, text, options, answers);
     }
 
     @Override
@@ -90,6 +99,6 @@ public class Quiz {
                 title.equals(other.title) &&
                 text.equals(other.text) &&
                 options.equals(other.options) &&
-                answerList.equals(other.answerList);
+                answers.equals(other.answers);
     }
 }

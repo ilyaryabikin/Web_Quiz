@@ -1,18 +1,20 @@
 package webquiz.engine.json;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import webquiz.engine.domain.Answer;
+import webquiz.engine.domain.Option;
 import webquiz.engine.domain.Quiz;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuizDeserializer extends StdDeserializer<Quiz> {
 
@@ -25,31 +27,40 @@ public class QuizDeserializer extends StdDeserializer<Quiz> {
     }
 
     @Override
-    public Quiz deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        JsonNode node = jp.getCodec().readTree(jp);
+    public Quiz deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+        Quiz quiz = new Quiz();
+        JsonNode node = parser.getCodec().readTree(parser);
 
         String title = node.get("title").textValue();
+        quiz.setTitle(title);
 
         String text = node.get("text").textValue();
+        quiz.setText(text);
 
         ObjectReader optionsReader = new ObjectMapper().readerFor(new TypeReference<List<String>>() {});
         JsonNode optionsNode = node.get("options");
-        List<String> options;
+        List<String> optionsString;
         if (optionsNode == null) {
-            options = new ArrayList<>();
+            optionsString = new ArrayList<>();
         } else {
-            options = optionsReader.readValue(optionsNode);
+            optionsString = optionsReader.readValue(optionsNode);
         }
+        List<Option> options = optionsString.stream()
+                .map(s -> new Option(s, quiz)).collect(Collectors.toList());
+        quiz.setOptions(options);
 
         ObjectReader answerReader = new ObjectMapper().readerFor(new TypeReference<List<Integer>>() {});
         JsonNode answerNode = node.get("answer");
-        List<Integer> answer;
+        List<Integer> answerInt;
         if (answerNode == null) {
-            answer = new ArrayList<>();
+            answerInt = new ArrayList<>();
         } else {
-            answer = answerReader.readValue(answerNode);
+            answerInt = answerReader.readValue(answerNode);
         }
+        List<Answer> answers = answerInt.stream()
+                .map(i -> new Answer(i, quiz)).collect(Collectors.toList());
+        quiz.setAnswers(answers);
 
-        return new Quiz(title, text, options, answer);
+        return quiz;
     }
 }

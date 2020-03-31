@@ -1,10 +1,11 @@
 package webquiz.engine.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@Entity(name = "answers")
-public class Answer implements Serializable {
+@Entity(name = "options")
+public class Option implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,22 +15,18 @@ public class Answer implements Serializable {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
-    @Column(name = "answer_index")
-    private int answerIndex;
+    @NotBlank
+    private String option;
 
-    public Answer() {}
+    public Option() {}
 
-    public Answer(int answerIndex, Quiz quiz) {
-        this.answerIndex = answerIndex;
+    public Option(String option, Quiz quiz) {
+        this.option = option;
         this.quiz = quiz;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Quiz getQuiz() {
@@ -40,11 +37,15 @@ public class Answer implements Serializable {
         this.quiz = quiz;
     }
 
-    public int getAnswerIndex() {
-        return answerIndex;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setAnswerIndex(int answerIndex) {
-        this.answerIndex = answerIndex;
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
     }
 }
