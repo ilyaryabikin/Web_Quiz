@@ -1,5 +1,6 @@
 package webquiz.engine.json;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -41,6 +42,8 @@ public class QuizDeserializer extends StdDeserializer<Quiz> {
         JsonNode optionsNode = node.get("options");
         List<String> optionsString;
         if (optionsNode == null) {
+            throw new JsonParseException(parser, "'options' field has invalid format.");
+        } else if (optionsNode.isEmpty()) {
             optionsString = new ArrayList<>();
         } else {
             optionsString = optionsReader.readValue(optionsNode);
