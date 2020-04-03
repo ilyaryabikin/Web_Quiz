@@ -36,6 +36,10 @@ public class Quiz implements Serializable {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+
     public Quiz() {}
 
     public Quiz(String title, String text, List<Option> options, List<Answer> answers) {
@@ -83,6 +87,14 @@ public class Quiz implements Serializable {
 
     public void setAnswers(List<Answer> answerList) {
         this.answers = answerList;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @Override
