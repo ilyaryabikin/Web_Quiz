@@ -28,6 +28,10 @@ public class Quiz implements Serializable {
     @NotBlank
     private String text;
 
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private User author;
+
     @Size(min = 2)
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<Option> options;
@@ -36,18 +40,10 @@ public class Quiz implements Serializable {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<Answer> answers;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User author;
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<SolvedQuiz> solvedQuizzes;
 
     public Quiz() {}
-
-    public Quiz(String title, String text, List<Option> options, List<Answer> answers) {
-        this.title = title;
-        this.text = text;
-        this.options = options;
-        this.answers = answers;
-    }
 
     public int getId() {
         return id;
@@ -95,6 +91,14 @@ public class Quiz implements Serializable {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public List<SolvedQuiz> getSolvedQuizzes() {
+        return solvedQuizzes;
+    }
+
+    public void setSolvedQuizzes(List<SolvedQuiz> solvedQuizzes) {
+        this.solvedQuizzes = solvedQuizzes;
     }
 
     @Override

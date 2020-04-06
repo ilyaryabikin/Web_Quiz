@@ -5,7 +5,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,11 +18,13 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    @Size(min = 5)
     private String password;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<Quiz> quizzes;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Quiz> createdQuizzes;
+
+    @OneToMany(mappedBy = "solver", cascade = CascadeType.ALL)
+    private List<SolvedQuiz> solvedQuizzes;
 
     public User() {}
 
@@ -57,12 +58,20 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<Quiz> getQuizzes() {
-        return quizzes;
+    public List<Quiz> getCreatedQuizzes() {
+        return createdQuizzes;
     }
 
-    public void setQuizzes(List<Quiz> quizzes) {
-        this.quizzes = quizzes;
+    public void setCreatedQuizzes(List<Quiz> quizzes) {
+        this.createdQuizzes = quizzes;
+    }
+
+    public List<SolvedQuiz> getSolvedQuizzes() {
+        return solvedQuizzes;
+    }
+
+    public void setSolvedQuizzes(List<SolvedQuiz> solvedQuizzes) {
+        this.solvedQuizzes = solvedQuizzes;
     }
 
     @Override

@@ -1,6 +1,9 @@
 package webquiz.engine.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import webquiz.engine.domain.*;
 import webquiz.engine.exception.UserIsNotAuthorException;
 import webquiz.engine.repository.QuizRepository;
+import webquiz.engine.repository.SolvedQuizRepository;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,12 +22,16 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/quizzes")
 public class QuizRestController {
+    private static final int PAGE_SIZE = 10;
 
     private final QuizRepository quizRepository;
+    private final SolvedQuizRepository solvedQuizRepository;
 
     @Autowired
-    public QuizRestController(QuizRepository quizRepository) {
+    public QuizRestController(QuizRepository quizRepository,
+                              SolvedQuizRepository solvedQuizRepository) {
         this.quizRepository = quizRepository;
+        this.solvedQuizRepository = solvedQuizRepository;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -35,22 +43,42 @@ public class QuizRestController {
 
     @PostMapping(value = "{id}/solve", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Feedback solveQuiz(@PathVariable int id,
-                              @Valid @RequestBody SubmittedAnswer submittedAnswer) {
+                              @Valid @RequestBody SubmittedAnswer submittedAnswer,
+                              Authentication authentication) {
         Optional<Quiz> quizToSolve = quizRepository.findById(id);
         if (quizToSolve.isPresent()) {
-            List<Answer> quizAnswer = quizToSolve.get().getAnswers();
+            Quiz quiz = quizToSolve.get();
+            List<Answer> quizAnswer = quiz.getAnswers();
             List<Integer> expectedAnswer = quizAnswer.stream()
                     .map(Answer::getAnswerIndex).collect(Collectors.toList());
             List<Integer> givenAnswer = submittedAnswer.getAnswer();
-            return getFeedback(givenAnswer, expectedAnswer);
+            Feedback feedback = getFeedback(givenAnswer, expectedAnswer);
+            if (feedback.isSuccess()) {
+                User user = (User)authentication.getPrincipal();
+                SolvedQuiz solvedQuiz = new SolvedQuiz(quiz, user);
+                solvedQuizRepository.save(solvedQuiz);
+            }
+            return feedback;
         } else {
             throw new NoSuchElementException("Quiz with id " + id + " does not exist.");
         }
     }
 
     @GetMapping
-    public List<Quiz> getAllQuizzes() {
-        return quizRepository.findAll();
+    public Page<Quiz> getAllQuizzes(@RequestParam Optional<Integer> page) {
+        return quizRepository.findAll(PageRequest.of(
+                page.orElse(0),
+                PAGE_SIZE));
+    }
+
+    @GetMapping("/completed")
+    public Page<SolvedQuiz> getAllSolvedQuizzes(@RequestParam Optional<Integer> page,
+                                                Authentication authentication) {
+        User user = (User)authentication.getPrincipal();
+        return solvedQuizRepository.findAllBySolver(user, PageRequest.of(
+                page.orElse(0),
+                PAGE_SIZE,
+                Sort.by("completedAt").descending()));
     }
 
     @GetMapping("{id}")
