@@ -75,9 +75,9 @@ public class QuizRestController {
 
     private Feedback getFeedback(List<Integer> givenAnswer, List<Integer> expectedAnswer) {
         if (givenAnswer.equals(expectedAnswer)) {
-            return new Feedback(true, Feedback.RIGHT);
+            return Feedback.RIGHT;
         } else {
-            return new Feedback(false, Feedback.WRONG);
+            return Feedback.WRONG;
         }
     }
 }
