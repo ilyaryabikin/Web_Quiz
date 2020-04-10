@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import webquiz.engine.json.SolvedQuizSerializer;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity(name = "solved_quizzes")
 @JsonSerialize(using = SolvedQuizSerializer.class)
@@ -14,7 +14,7 @@ public class SolvedQuiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private LocalDateTime completedAt;
+    private Instant completedAt;
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
@@ -25,7 +25,7 @@ public class SolvedQuiz {
     private User solver;
 
     public SolvedQuiz() {
-        this.completedAt = LocalDateTime.now();
+        this.completedAt = Instant.now();
     }
 
     public SolvedQuiz(Quiz quiz, User solver) {
@@ -42,11 +42,11 @@ public class SolvedQuiz {
         this.id = id;
     }
 
-    public LocalDateTime getCompletedAt() {
+    public Instant getCompletedAt() {
         return completedAt;
     }
 
-    public void setCompletedAt(LocalDateTime completedAt) {
+    public void setCompletedAt(Instant completedAt) {
         this.completedAt = completedAt;
     }
 
