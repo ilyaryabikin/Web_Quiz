@@ -50,8 +50,7 @@ public class QuizRestController {
                               Authentication authentication) {
         Quiz quizToSolve = quizRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Quiz with id " + id + " does not exist."));
-        List<Integer> givenAnswer = submittedAnswer.getAnswer();
-        Feedback feedback = quizToSolve.testAgainst(givenAnswer);
+        Feedback feedback = quizToSolve.testAgainst(submittedAnswer);
         if (feedback.isSuccess()) {
             saveSolvedQuiz(quizToSolve, authentication);
         }

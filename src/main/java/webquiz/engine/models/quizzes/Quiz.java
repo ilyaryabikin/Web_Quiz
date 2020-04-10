@@ -103,9 +103,10 @@ public class Quiz implements Serializable {
         this.solvedQuizzes = solvedQuizzes;
     }
 
-    public Feedback testAgainst(List<Integer> givenAnswer) {
+    public Feedback testAgainst(SubmittedAnswer submittedAnswer) {
         List<Integer> expectedAnswer = quizAnswers.stream()
                 .map(QuizAnswer::getIndex).collect(Collectors.toList());
+        List<Integer> givenAnswer = submittedAnswer.getAnswer();
         return expectedAnswer.equals(givenAnswer) ? Feedback.RIGHT :
                 Feedback.WRONG;
     }
