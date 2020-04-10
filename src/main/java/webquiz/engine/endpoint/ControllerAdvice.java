@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import webquiz.engine.exception.UserAlreadyExistsException;
 import webquiz.engine.exception.UserIsNotAuthorException;
 
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
+import java.time.Instant;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -20,49 +19,39 @@ public class ControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleMethodArgumentNotValidException(Exception e) {
-        return getBadRequestResponse(e);
+        return getErrorDetails(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNoSuchElementException(Exception e) {
-        Map<String, String> response = new LinkedHashMap<>();
-        response.put("timestamp", LocalDateTime.now().toString());
-        response.put("status", String.valueOf(HttpStatus.NOT_FOUND.value()));
-        response.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());
-        response.put("message", e.getMessage());
-        return response;
+        return getErrorDetails(e, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(JsonParseException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleJsonParseException(Exception e) {
-        return getBadRequestResponse(e);
+        return getErrorDetails(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleUserAlreadyExistsException(Exception e) {
-        return getBadRequestResponse(e);
+        return getErrorDetails(e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserIsNotAuthorException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public Map<String, String> handleUserIsNotAuthorException(Exception e) {
-        Map<String, String> response = new LinkedHashMap<>();
-        response.put("timestamp", LocalDateTime.now().toString());
-        response.put("status", String.valueOf(HttpStatus.FORBIDDEN.value()));
-        response.put("error", HttpStatus.FORBIDDEN.getReasonPhrase());
-        response.put("message", e.getMessage());
-        return response;
+        return getErrorDetails(e, HttpStatus.FORBIDDEN);
     }
 
-    private Map<String, String> getBadRequestResponse(Exception e) {
-        Map<String, String> response = new LinkedHashMap<>();
-        response.put("timestamp", LocalDateTime.now().toString());
-        response.put("status", String.valueOf(HttpStatus.BAD_REQUEST.value()));
-        response.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
-        response.put("message", e.getMessage());
-        return response;
+    private Map<String, String> getErrorDetails(Exception e, HttpStatus status) {
+        return Map.of(
+                "timestamp", Instant.now().toString(),
+                "status", String.valueOf(status.value()),
+                "error", status.getReasonPhrase(),
+                "message", e.getMessage()
+        );
     }
 }
