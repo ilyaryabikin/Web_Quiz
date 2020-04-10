@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity(name = "answers")
-public class Answer implements Serializable {
+public class QuizAnswer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,13 +14,13 @@ public class Answer implements Serializable {
     @JoinColumn(name = "quiz_id", nullable = false)
     private Quiz quiz;
 
-    @Column(name = "answer_index")
-    private int answerIndex;
+    @Column(name = "index")
+    private int index;
 
-    public Answer() {}
+    public QuizAnswer() {}
 
-    public Answer(int answerIndex, Quiz quiz) {
-        this.answerIndex = answerIndex;
+    public QuizAnswer(int index, Quiz quiz) {
+        this.index = index;
         this.quiz = quiz;
     }
 
@@ -40,11 +40,11 @@ public class Answer implements Serializable {
         this.quiz = quiz;
     }
 
-    public int getAnswerIndex() {
-        return answerIndex;
+    public int getIndex() {
+        return index;
     }
 
-    public void setAnswerIndex(int answerIndex) {
-        this.answerIndex = answerIndex;
+    public void setIndex(int answerIndex) {
+        this.index = answerIndex;
     }
 }

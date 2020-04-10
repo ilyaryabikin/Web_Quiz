@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity(name = "options")
-public class Option implements Serializable {
+public class QuizOption implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +16,12 @@ public class Option implements Serializable {
     private Quiz quiz;
 
     @NotBlank
-    private String option;
+    private String value;
 
-    public Option() {}
+    public QuizOption() {}
 
-    public Option(String option, Quiz quiz) {
-        this.option = option;
+    public QuizOption(String value, Quiz quiz) {
+        this.value = value;
         this.quiz = quiz;
     }
 
@@ -41,11 +41,11 @@ public class Option implements Serializable {
         this.id = id;
     }
 
-    public String getOption() {
-        return option;
+    public String getValue() {
+        return value;
     }
 
-    public void setOption(String option) {
-        this.option = option;
+    public void setValue(String option) {
+        this.value = option;
     }
 }

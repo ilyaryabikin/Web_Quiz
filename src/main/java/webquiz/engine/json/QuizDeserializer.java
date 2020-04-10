@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import webquiz.engine.domain.Answer;
-import webquiz.engine.domain.Option;
+import webquiz.engine.domain.QuizAnswer;
+import webquiz.engine.domain.QuizOption;
 import webquiz.engine.domain.Quiz;
 
 import java.io.IOException;
@@ -48,9 +48,9 @@ public class QuizDeserializer extends StdDeserializer<Quiz> {
         } else {
             optionsString = optionsReader.readValue(optionsNode);
         }
-        List<Option> options = optionsString.stream()
-                .map(s -> new Option(s, quiz)).collect(Collectors.toList());
-        quiz.setOptions(options);
+        List<QuizOption> quizOptions = optionsString.stream()
+                .map(s -> new QuizOption(s, quiz)).collect(Collectors.toList());
+        quiz.setQuizOptions(quizOptions);
 
         ObjectReader answerReader = new ObjectMapper().readerFor(new TypeReference<List<Integer>>() {});
         JsonNode answerNode = node.get("answer");
@@ -60,9 +60,9 @@ public class QuizDeserializer extends StdDeserializer<Quiz> {
         } else {
             answerInt = answerReader.readValue(answerNode);
         }
-        List<Answer> answers = answerInt.stream()
-                .map(i -> new Answer(i, quiz)).collect(Collectors.toList());
-        quiz.setAnswers(answers);
+        List<QuizAnswer> quizAnswers = answerInt.stream()
+                .map(i -> new QuizAnswer(i, quiz)).collect(Collectors.toList());
+        quiz.setQuizAnswers(quizAnswers);
 
         return quiz;
     }

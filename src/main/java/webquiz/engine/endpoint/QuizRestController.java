@@ -48,9 +48,9 @@ public class QuizRestController {
         Optional<Quiz> quizToSolve = quizRepository.findById(id);
         if (quizToSolve.isPresent()) {
             Quiz quiz = quizToSolve.get();
-            List<Answer> quizAnswer = quiz.getAnswers();
+            List<QuizAnswer> quizAnswer = quiz.getQuizAnswers();
             List<Integer> expectedAnswer = quizAnswer.stream()
-                    .map(Answer::getAnswerIndex).collect(Collectors.toList());
+                    .map(QuizAnswer::getIndex).collect(Collectors.toList());
             List<Integer> givenAnswer = submittedAnswer.getAnswer();
             Feedback feedback = getFeedback(givenAnswer, expectedAnswer);
             if (feedback.isSuccess()) {

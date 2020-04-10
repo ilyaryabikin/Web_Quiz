@@ -34,11 +34,11 @@ public class Quiz implements Serializable {
 
     @Size(min = 2)
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    private List<Option> options;
+    private List<QuizOption> quizOptions;
 
     @NotNull
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    private List<Answer> answers;
+    private List<QuizAnswer> quizAnswers;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<SolvedQuiz> solvedQuizzes;
@@ -69,20 +69,20 @@ public class Quiz implements Serializable {
         this.text = text;
     }
 
-    public List<Option> getOptions() {
-        return options;
+    public List<QuizOption> getQuizOptions() {
+        return quizOptions;
     }
 
-    public void setOptions(List<Option> options) {
-        this.options = options;
+    public void setQuizOptions(List<QuizOption> quizOptions) {
+        this.quizOptions = quizOptions;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<QuizAnswer> getQuizAnswers() {
+        return quizAnswers;
     }
 
-    public void setAnswers(List<Answer> answerList) {
-        this.answers = answerList;
+    public void setQuizAnswers(List<QuizAnswer> quizAnswerList) {
+        this.quizAnswers = quizAnswerList;
     }
 
     public User getAuthor() {
@@ -103,7 +103,7 @@ public class Quiz implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, text, options, answers);
+        return Objects.hash(id, title, text, quizOptions, quizAnswers);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class Quiz implements Serializable {
         return id == other.id &&
                 title.equals(other.title) &&
                 text.equals(other.text) &&
-                options.equals(other.options) &&
-                answers.equals(other.answers);
+                quizOptions.equals(other.quizOptions) &&
+                quizAnswers.equals(other.quizAnswers);
     }
 }

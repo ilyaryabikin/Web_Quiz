@@ -3,7 +3,7 @@ package webquiz.engine.json;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import webquiz.engine.domain.Option;
+import webquiz.engine.domain.QuizOption;
 import webquiz.engine.domain.Quiz;
 
 import java.io.IOException;
@@ -27,8 +27,8 @@ public class QuizSerializer extends StdSerializer<Quiz> {
         gen.writeStringField("text", quiz.getText());
         gen.writeFieldName("options");
         gen.writeStartArray();
-        for (Option option: quiz.getOptions()) {
-            gen.writeString(option.getOption());
+        for (QuizOption quizOption : quiz.getQuizOptions()) {
+            gen.writeString(quizOption.getValue());
         }
         gen.writeEndArray();
 
