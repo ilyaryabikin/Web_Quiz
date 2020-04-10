@@ -5,6 +5,8 @@ create and delete his own quizzes and get solved ones.
 The idea and basic implementation
 stages were taken from the [JetBrains Academy](https://hi.hyperskill.org/ "Hyperskill")
 
+Last stage implementation was reviewed by Hyperskill Team.
+
 ### Endpoints
 All endpoints except the first one return `401 Unauthorized` status code if user is not authorized. 
 
