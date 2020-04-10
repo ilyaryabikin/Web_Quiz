@@ -1,8 +1,10 @@
-package webquiz.engine.domain;
+package webquiz.engine.models.users;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import webquiz.engine.models.quizzes.Quiz;
+import webquiz.engine.models.quizzes.SolvedQuiz;
 
 import javax.persistence.*;
 import java.util.Collection;

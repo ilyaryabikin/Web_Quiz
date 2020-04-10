@@ -1,7 +1,8 @@
-package webquiz.engine.domain;
+package webquiz.engine.models.quizzes;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import webquiz.engine.json.SolvedQuizSerializer;
+import webquiz.engine.models.quizzes.json.SolvedQuizSerializer;
+import webquiz.engine.models.users.User;
 
 import javax.persistence.*;
 import java.time.Instant;

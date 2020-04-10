@@ -1,10 +1,10 @@
-package webquiz.engine.json;
+package webquiz.engine.models.quizzes.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import webquiz.engine.domain.QuizOption;
-import webquiz.engine.domain.Quiz;
+import webquiz.engine.models.quizzes.QuizOption;
+import webquiz.engine.models.quizzes.Quiz;
 
 import java.io.IOException;
 

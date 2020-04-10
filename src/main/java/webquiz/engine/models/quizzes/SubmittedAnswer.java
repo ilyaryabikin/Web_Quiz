@@ -1,4 +1,4 @@
-package webquiz.engine.domain;
+package webquiz.engine.models.quizzes;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

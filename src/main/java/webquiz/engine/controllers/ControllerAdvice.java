@@ -1,4 +1,4 @@
-package webquiz.engine.endpoint;
+package webquiz.engine.controllers;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import org.springframework.http.HttpStatus;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import webquiz.engine.exception.UserAlreadyExistsException;
-import webquiz.engine.exception.UserIsNotAuthorException;
+import webquiz.engine.models.exceptions.UserAlreadyExistsException;
+import webquiz.engine.models.exceptions.UserIsNotAuthorException;
 
 import java.time.Instant;
 import java.util.Map;

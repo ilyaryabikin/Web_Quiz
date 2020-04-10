@@ -1,9 +1,10 @@
-package webquiz.engine.domain;
+package webquiz.engine.models.quizzes;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import webquiz.engine.json.QuizDeserializer;
-import webquiz.engine.json.QuizSerializer;
+import webquiz.engine.models.quizzes.json.QuizDeserializer;
+import webquiz.engine.models.quizzes.json.QuizSerializer;
+import webquiz.engine.models.users.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

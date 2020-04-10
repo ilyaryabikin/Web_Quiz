@@ -1,4 +1,4 @@
-package webquiz.engine.domain;
+package webquiz.engine.models.users;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 

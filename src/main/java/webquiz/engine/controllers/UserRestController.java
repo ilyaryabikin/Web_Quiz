@@ -1,4 +1,4 @@
-package webquiz.engine.endpoint;
+package webquiz.engine.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import webquiz.engine.domain.User;
-import webquiz.engine.domain.UserCredentials;
-import webquiz.engine.exception.UserAlreadyExistsException;
-import webquiz.engine.repository.UserRepository;
+import webquiz.engine.models.users.User;
+import webquiz.engine.models.users.UserCredentials;
+import webquiz.engine.models.exceptions.UserAlreadyExistsException;
+import webquiz.engine.repositories.UserRepository;
 
 import javax.validation.Valid;
 import java.util.Optional;

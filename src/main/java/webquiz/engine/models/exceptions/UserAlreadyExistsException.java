@@ -1,4 +1,4 @@
-package webquiz.engine.exception;
+package webquiz.engine.models.exceptions;
 
 public class UserAlreadyExistsException extends RuntimeException {
 

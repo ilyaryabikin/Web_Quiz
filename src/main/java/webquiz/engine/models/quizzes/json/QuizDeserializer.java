@@ -1,4 +1,4 @@
-package webquiz.engine.json;
+package webquiz.engine.models.quizzes.json;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import webquiz.engine.domain.QuizAnswer;
-import webquiz.engine.domain.QuizOption;
-import webquiz.engine.domain.Quiz;
+import webquiz.engine.models.quizzes.QuizAnswer;
+import webquiz.engine.models.quizzes.QuizOption;
+import webquiz.engine.models.quizzes.Quiz;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package webquiz.engine.security;
+package webquiz.engine.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import webquiz.engine.domain.User;
-import webquiz.engine.repository.UserRepository;
+import webquiz.engine.models.users.User;
+import webquiz.engine.repositories.UserRepository;
 
 import java.util.Optional;
 

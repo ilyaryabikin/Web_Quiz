@@ -1,4 +1,4 @@
-package webquiz.engine.domain;
+package webquiz.engine.models.quizzes;
 
 import javax.persistence.*;
 import java.io.Serializable;

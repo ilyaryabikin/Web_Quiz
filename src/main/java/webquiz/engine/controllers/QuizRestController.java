@@ -1,4 +1,4 @@
-package webquiz.engine.endpoint;
+package webquiz.engine.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -8,10 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import webquiz.engine.domain.*;
-import webquiz.engine.exception.UserIsNotAuthorException;
-import webquiz.engine.repository.QuizRepository;
-import webquiz.engine.repository.SolvedQuizRepository;
+import webquiz.engine.models.exceptions.UserIsNotAuthorException;
+import webquiz.engine.models.quizzes.Feedback;
+import webquiz.engine.models.quizzes.Quiz;
+import webquiz.engine.models.quizzes.SolvedQuiz;
+import webquiz.engine.models.quizzes.SubmittedAnswer;
+import webquiz.engine.models.users.User;
+import webquiz.engine.repositories.QuizRepository;
+import webquiz.engine.repositories.SolvedQuizRepository;
 
 import javax.validation.Valid;
 import java.util.List;

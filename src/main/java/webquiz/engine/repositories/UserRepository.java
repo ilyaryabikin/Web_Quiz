@@ -1,8 +1,8 @@
-package webquiz.engine.repository;
+package webquiz.engine.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import webquiz.engine.domain.User;
+import webquiz.engine.models.users.User;
 
 import java.util.Optional;
 
