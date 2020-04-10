@@ -17,7 +17,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/quizzes")
@@ -36,7 +35,7 @@ public class QuizRestController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Quiz saveQuiz(@Valid @RequestBody Quiz quiz, Authentication authentication) {
-        User user = (User)authentication.getPrincipal();
+        User user = getUserFromAuthentication(authentication);
         quiz.setAuthor(user);
         return quizRepository.save(quiz);
     }
@@ -45,23 +44,14 @@ public class QuizRestController {
     public Feedback solveQuiz(@PathVariable int id,
                               @Valid @RequestBody SubmittedAnswer submittedAnswer,
                               Authentication authentication) {
-        Optional<Quiz> quizToSolve = quizRepository.findById(id);
-        if (quizToSolve.isPresent()) {
-            Quiz quiz = quizToSolve.get();
-            List<QuizAnswer> quizAnswer = quiz.getQuizAnswers();
-            List<Integer> expectedAnswer = quizAnswer.stream()
-                    .map(QuizAnswer::getIndex).collect(Collectors.toList());
-            List<Integer> givenAnswer = submittedAnswer.getAnswer();
-            Feedback feedback = getFeedback(givenAnswer, expectedAnswer);
-            if (feedback.isSuccess()) {
-                User user = (User)authentication.getPrincipal();
-                SolvedQuiz solvedQuiz = new SolvedQuiz(quiz, user);
-                solvedQuizRepository.save(solvedQuiz);
-            }
-            return feedback;
-        } else {
-            throw new NoSuchElementException("Quiz with id " + id + " does not exist.");
+        Quiz quizToSolve = quizRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Quiz with id " + id + " does not exist."));
+        List<Integer> givenAnswer = submittedAnswer.getAnswer();
+        Feedback feedback = quizToSolve.testAgainst(givenAnswer);
+        if (feedback.isSuccess()) {
+            saveSolvedQuiz(quizToSolve, authentication);
         }
+        return feedback;
     }
 
     @GetMapping
@@ -74,7 +64,7 @@ public class QuizRestController {
     @GetMapping("/completed")
     public Page<SolvedQuiz> getAllSolvedQuizzes(@RequestParam Optional<Integer> page,
                                                 Authentication authentication) {
-        User user = (User)authentication.getPrincipal();
+        User user = getUserFromAuthentication(authentication);
         return solvedQuizRepository.findAllBySolver(user, PageRequest.of(
                 page.orElse(0),
                 PAGE_SIZE,
@@ -93,19 +83,21 @@ public class QuizRestController {
     public void deleteQuiz(@PathVariable int id, Authentication authentication) {
         Quiz quiz = quizRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Quiz with id " + id + " does not exist."));
-        User user = (User)authentication.getPrincipal();
-        if (quiz.getAuthor().getId() != user.getId()) {
+        User user = getUserFromAuthentication(authentication);
+        if (!user.isAuthorOf(quiz)) {
             throw new UserIsNotAuthorException("User with email " + user.getEmail() +
                     " is not allowed to delete a quiz he had not created.");
         }
         quizRepository.delete(quiz);
     }
 
-    private Feedback getFeedback(List<Integer> givenAnswer, List<Integer> expectedAnswer) {
-        if (givenAnswer.equals(expectedAnswer)) {
-            return Feedback.RIGHT;
-        } else {
-            return Feedback.WRONG;
-        }
+    private SolvedQuiz saveSolvedQuiz(Quiz quiz, Authentication authentication) {
+        User user = getUserFromAuthentication(authentication);
+        SolvedQuiz solvedQuiz = new SolvedQuiz(quiz, user);
+        return solvedQuizRepository.save(solvedQuiz);
+    }
+
+    private User getUserFromAuthentication(Authentication authentication) {
+        return (User) authentication.getPrincipal();
     }
 }

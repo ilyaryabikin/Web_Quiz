@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity(name = "quizzes")
 @JsonSerialize(using = QuizSerializer.class)
@@ -99,6 +100,13 @@ public class Quiz implements Serializable {
 
     public void setSolvedQuizzes(List<SolvedQuiz> solvedQuizzes) {
         this.solvedQuizzes = solvedQuizzes;
+    }
+
+    public Feedback testAgainst(List<Integer> givenAnswer) {
+        List<Integer> expectedAnswer = quizAnswers.stream()
+                .map(QuizAnswer::getIndex).collect(Collectors.toList());
+        return expectedAnswer.equals(givenAnswer) ? Feedback.RIGHT :
+                Feedback.WRONG;
     }
 
     @Override

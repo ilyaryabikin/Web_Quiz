@@ -74,6 +74,10 @@ public class User implements UserDetails {
         this.solvedQuizzes = solvedQuizzes;
     }
 
+    public boolean isAuthorOf(Quiz quiz) {
+        return Integer.compare(quiz.getId(), id) == 0;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
