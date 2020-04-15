@@ -1,9 +1,14 @@
 package webquiz.engine.models.quizzes;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity(name = "answers")
+@Data
+@NoArgsConstructor
 public class QuizAnswer implements Serializable {
 
     @Id
@@ -17,34 +22,8 @@ public class QuizAnswer implements Serializable {
     @Column(name = "index")
     private int index;
 
-    public QuizAnswer() {}
-
     public QuizAnswer(int index, Quiz quiz) {
         this.index = index;
         this.quiz = quiz;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Quiz getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int answerIndex) {
-        this.index = answerIndex;
     }
 }

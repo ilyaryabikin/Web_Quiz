@@ -1,5 +1,7 @@
 package webquiz.engine.models.users;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,8 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "users")
+@Data
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -28,52 +32,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "solver", cascade = CascadeType.ALL)
     private List<SolvedQuiz> solvedQuizzes;
 
-    public User() {}
-
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Quiz> getCreatedQuizzes() {
-        return createdQuizzes;
-    }
-
-    public void setCreatedQuizzes(List<Quiz> quizzes) {
-        this.createdQuizzes = quizzes;
-    }
-
-    public List<SolvedQuiz> getSolvedQuizzes() {
-        return solvedQuizzes;
-    }
-
-    public void setSolvedQuizzes(List<SolvedQuiz> solvedQuizzes) {
-        this.solvedQuizzes = solvedQuizzes;
     }
 
     public boolean isAuthorOf(Quiz quiz) {

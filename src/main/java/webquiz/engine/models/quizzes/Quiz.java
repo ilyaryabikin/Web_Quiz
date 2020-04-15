@@ -2,6 +2,8 @@ package webquiz.engine.models.quizzes;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import webquiz.engine.models.quizzes.json.QuizDeserializer;
 import webquiz.engine.models.quizzes.json.QuizSerializer;
 import webquiz.engine.models.users.User;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 @Entity(name = "quizzes")
 @JsonSerialize(using = QuizSerializer.class)
 @JsonDeserialize(using = QuizDeserializer.class)
+@Data
+@NoArgsConstructor
 public class Quiz implements Serializable {
 
     @Id
@@ -45,86 +49,11 @@ public class Quiz implements Serializable {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<SolvedQuiz> solvedQuizzes;
 
-    public Quiz() {}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public List<QuizOption> getQuizOptions() {
-        return quizOptions;
-    }
-
-    public void setQuizOptions(List<QuizOption> quizOptions) {
-        this.quizOptions = quizOptions;
-    }
-
-    public List<QuizAnswer> getQuizAnswers() {
-        return quizAnswers;
-    }
-
-    public void setQuizAnswers(List<QuizAnswer> quizAnswerList) {
-        this.quizAnswers = quizAnswerList;
-    }
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
-    public List<SolvedQuiz> getSolvedQuizzes() {
-        return solvedQuizzes;
-    }
-
-    public void setSolvedQuizzes(List<SolvedQuiz> solvedQuizzes) {
-        this.solvedQuizzes = solvedQuizzes;
-    }
-
     public Feedback testAgainst(SubmittedAnswer submittedAnswer) {
         List<Integer> expectedAnswer = quizAnswers.stream()
                 .map(QuizAnswer::getIndex).collect(Collectors.toList());
         List<Integer> givenAnswer = submittedAnswer.getAnswer();
         return expectedAnswer.equals(givenAnswer) ? Feedback.RIGHT :
                 Feedback.WRONG;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, text, quizOptions, quizAnswers);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Quiz other = ((Quiz) obj);
-        return id == other.id &&
-                title.equals(other.title) &&
-                text.equals(other.text) &&
-                quizOptions.equals(other.quizOptions) &&
-                quizAnswers.equals(other.quizAnswers);
     }
 }
